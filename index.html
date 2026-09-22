@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CB_Dogs_Hub - Premium Puppies & Dog Breeds</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <!-- Glassmorphic Header -->
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <i class="fa-solid fa-dog logo-icon"></i>
+                <span class="logo-text">CB_Dogs<span class="accent-text">_Hub</span></span>
+            </div>
+
+
+            <nav class="nav-actions">
+                <button class="nav-btn theme-toggle-btn" id="themeToggleBtn" title="Toggle Light/Dark Mode">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+                <button class="nav-btn auth-toggle-btn" id="openAuthBtn" title="Login / Register">
+                    <i class="fa-solid fa-circle-user" id="authIcon"></i> <span class="btn-label" id="authBtnLabel">Login</span>
+                </button>
+                <button class="nav-btn saved-toggle-btn" id="openSavedBtn">
+                    <i class="fa-solid fa-heart"></i> <span class="btn-label">Saved</span>
+                    <span class="badge" id="savedCount">0</span>
+                </button>
+                <button class="nav-btn cart-toggle-btn" id="openCartBtn">
+                    <i class="fa-solid fa-shopping-cart"></i> <span class="btn-label">Cart</span>
+                    <span class="badge" id="cartCount">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Banner Section -->
+    <section class="hero-section">
+        <div class="hero-banner-container">
+            <img src="hero_banner.png" alt="CB Dogs Hub Banner" class="hero-banner-img">
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <span class="hero-tagline">Welcome to CB_Dogs_Hub</span>
+                    <h1>Find Your Perfect Canine Companion</h1>
+                    <p>Connecting loving families with premium puppies across India. Healthy, certified, and raised with care.</p>
+                    <div class="hero-buttons">
+                        <a href="#breed-explorer" class="hero-btn primary-btn">Explore Breeds</a>
+                        <a href="https://wa.me/919663872853?text=Hi%20CB%20Dogs%20Hub,%20I'm%20interested%20in%20a%20puppy!" target="_blank" class="hero-btn whatsapp-btn">
+                            <i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="container" id="breed-explorer">
+        <!-- Controls & Filters Section -->
+        <section class="filter-section">
+            <div class="filter-header">
+                <h2>Browse Available Dog Breeds</h2>
+                <p>Select your favorite breed, compare official pricing, and place your order or reservation.</p>
+            </div>
+            
+            <div class="filter-bar">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="breedSearchInput" placeholder="Search breeds, colors, etc...">
+                </div>
+
+                <div class="filter-group">
+                    <div class="location-filters">
+                        <button class="filter-chip active" data-location="all">All Hubs</button>
+                        <button class="filter-chip" data-location="Chikkaballapur">Chikkaballapur Hub</button>
+                        <button class="filter-chip" data-location="Shidlagatt">Shidlagatt Hub</button>
+                    </div>
+
+                    <div class="sort-box">
+                        <label for="sortBySelect"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort by:</label>
+                        <select id="sortBySelect">
+                            <option value="default">Default</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="popularity">User Rating</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Breeds Grid -->
+        <section class="breeds-grid-container">
+            <div class="breeds-grid" id="breedsGrid">
+                <!-- Javascript will render cards here -->
+                <div class="loading-spinner">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading puppies, please wait...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Slide-Out Saved Puppies Drawer -->
+    <div class="drawer-overlay" id="savedOverlay"></div>
+    <div class="drawer saved-drawer" id="savedDrawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-heart accent-text"></i> Saved Puppies</h3>
+            <button class="close-drawer-btn" id="closeSavedBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <div class="saved-items-list" id="savedItemsList">
+                <p class="empty-message">No saved puppies yet. Click the heart icon on breed cards to save them!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide-Out Shopping Cart Drawer -->
+    <div class="drawer-overlay" id="cartOverlay"></div>
+    <div class="drawer cart-drawer" id="cartDrawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-shopping-cart accent-text"></i> Shopping Cart</h3>
+            <button class="close-drawer-btn" id="closeCartBtn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-content">
+            <div class="cart-items-list" id="cartItemsList">
+                <!-- Cart items load here dynamically -->
+                <p class="empty-message">Your shopping cart is empty.</p>
+            </div>
+            
+            <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="price-row">
+                    <span>Subtotal:</span>
+                    <span class="total-price-value" id="cartSubtotal">₹0</span>
+                </div>
+                <div class="price-row highlight">
+                    <span>Payment Method:</span>
+                    <span class="cod-badge"><i class="fa-solid fa-truck-ramp-box"></i> Cash On Delivery (COD)</span>
+                </div>
+                
+                <!-- Checkout Form -->
+                <form class="checkout-form" id="checkoutForm" name="cod_bookings" method="POST" data-netlify="true">
+                    <input type="hidden" name="form-name" value="cod_bookings">
+                    <input type="hidden" name="subject" id="cartFormSubject" value="New COD Order Placement - CB_Dogs_Hub">
+                    <input type="hidden" name="email" id="cartCustomerEmailHidden">
+                    <input type="hidden" name="order_items" id="cartOrderItemsHidden">
+                    <input type="hidden" name="total_price" id="cartTotalPriceHidden">
+                    <h4>Complete COD Booking</h4>
+                    <div class="form-group">
+                        <label for="cartCustomerName">Your Name *</label>
+                        <input type="text" id="cartCustomerName" name="name" required placeholder="Enter full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="cartCustomerPhone">Contact Number (WhatsApp preferred) *</label>
+                        <input type="tel" id="cartCustomerPhone" name="phone" required placeholder="Enter 10-digit number">
+                    </div>
+                    <div class="form-group">
+                        <label for="cartCustomerLocation">Delivery Location / Address *</label>
+                        <select id="cartCustomerLocation" name="location" required>
+    <option value="" disabled selected>Select location</option>
+
+    <option>Andhra Pradesh</option>
+    <option>Arunachal Pradesh</option>
+    <option>Assam</option>
+    <option>Bihar</option>
+    <option>Chhattisgarh</option>
+    <option>Goa</option>
+    <option>Gujarat</option>
+    <option>Haryana</option>
+    <option>Himachal Pradesh</option>
+    <option>Jharkhand</option>
+    <option>Karnataka</option>
+    <option>Kerala</option>
+    <option>Madhya Pradesh</option>
+    <option>Maharashtra</option>
+    <option>Manipur</option>
+    <option>Meghalaya</option>
+    <option>Mizoram</option>
+    <option>Nagaland</option>
+    <option>Odisha</option>
+    <option>Punjab</option>
+    <option>Rajasthan</option>
+    <option>Sikkim</option>
+    <option>Tamil Nadu</option>
+    <option>Telangana</option>
+    <option>Tripura</option>
+    <option>Uttar Pradesh</option>
+    <option>Uttarakhand</option>
+    <option>West Bengal</option>
+    <option>Andaman and Nicobar Islands</option>
+    <option>Chandigarh</option>
+    <option>Dadra and Nagar Haveli and Daman and Diu</option>
+    <option>Delhi</option>
+    <option>Jammu and Kashmir</option>
+    <option>Ladakh</option>
+    <option>Lakshadweep</option>
+    <option>Puducherry</option>
+</select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cartCustomerAddress">Detailed Delivery Address *</label>
+                        <textarea id="cartCustomerAddress" name="address" required placeholder="Enter street, landmark, city" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="checkout-submit-btn" id="checkoutSubmitBtn">
+                        <i class="fa-solid fa-check"></i> Place COD Booking
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reserve Puppy Modal Form -->
+    <div class="modal-overlay" id="reserveModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Reserve Puppy</h3>
+                <button class="close-modal-btn" id="closeReserveBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="reserve-breed-details">
+                    <span class="reserve-breed-tag">Selected Breed</span>
+                    <h4 id="reserveBreedName">Labrador Retriever</h4>
+                    <p id="reserveBreedPrices">Price range: ₹15,000 - ₹45,000</p>
+                </div>
+                <form class="modal-form" id="reserveForm" name="puppy_reservations" method="POST" data-netlify="true">
+                    <input type="hidden" name="form-name" value="puppy_reservations">
+                    <input type="hidden" name="subject" id="reserveFormSubject" value="New Puppy Reservation - CB_Dogs_Hub">
+                    <input type="hidden" name="email" id="reserveCustomerEmailHidden">
+                    <input type="hidden" id="reserveBreedId" name="breed">
+                    <div class="form-group">
+                        <label for="customerName">Your Name *</label>
+                        <input type="text" id="customerName" name="name" required placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerPhone">Contact Number *</label>
+                        <input type="tel" id="customerPhone" name="phone" required placeholder="Enter 10-digit phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="customerLocation">Your Location *</label>
+                        <select id="customerLocation" name="location" required>
+    <option value="" disabled selected>Select location</option>
+
+    <option>Andhra Pradesh</option>
+    <option>Arunachal Pradesh</option>
+    <option>Assam</option>
+    <option>Bihar</option>
+    <option>Chhattisgarh</option>
+    <option>Goa</option>
+    <option>Gujarat</option>
+    <option>Haryana</option>
+    <option>Himachal Pradesh</option>
+    <option>Jharkhand</option>
+    <option>Karnataka</option>
+    <option>Kerala</option>
+    <option>Madhya Pradesh</option>
+    <option>Maharashtra</option>
+    <option>Manipur</option>
+    <option>Meghalaya</option>
+    <option>Mizoram</option>
+    <option>Nagaland</option>
+    <option>Odisha</option>
+    <option>Punjab</option>
+    <option>Rajasthan</option>
+    <option>Sikkim</option>
+    <option>Tamil Nadu</option>
+    <option>Telangana</option>
+    <option>Tripura</option>
+    <option>Uttar Pradesh</option>
+    <option>Uttarakhand</option>
+    <option>West Bengal</option>
+    <option>Andaman and Nicobar Islands</option>
+    <option>Chandigarh</option>
+    <option>Dadra and Nagar Haveli and Daman and Diu</option>
+    <option>Delhi</option>
+    <option>Jammu and Kashmir</option>
+    <option>Ladakh</option>
+    <option>Lakshadweep</option>
+    <option>Puducherry</option>
+</select>
+                    </div>
+                    <button type="submit" class="modal-submit-btn">
+                        <i class="fa-solid fa-circle-check"></i> Submit Reservation Request
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-card confirmation-card">
+            <div class="success-icon-container">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+            </div>
+            <h3 id="confirmTitle">Reservation Submitted!</h3>
+            <p id="confirmMessage">Thank you! Your request has been logged. Our representative will contact you shortly.</p>
+            <div class="confirm-details">
+                <p><strong>Booking/Order ID:</strong> <span id="confirmId" class="accent-text">BK12345</span></p>
+                <p><strong>Contact Hub:</strong> Chikkaballapur / Shidlagatt</p>
+                <p><strong>Contact No:</strong> +91 9663872853</p>
+            </div>
+            <button class="modal-close-action-btn" id="closeConfirmBtn">Done</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-card admin-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user-shield"></i> CB_Dogs_Hub Admin Dashboard</h3>
+                <button class="close-modal-btn" id="closeAdminBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-tabs">
+                    <button class="admin-tab-btn active" data-tab="reservations">Reservations</button>
+                    <button class="admin-tab-btn" data-tab="orders">COD Bookings</button>
+                    <button class="admin-tab-btn" data-tab="add-breed">Add Dog Breed</button>
+                </div>
+                
+                <div class="admin-tab-content active" id="tab-reservations">
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Booking ID</th>
+                                    <th>Date</th>
+                                    <th>Breed</th>
+                                    <th>Customer Name</th>
+                                    <th>Contact No</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminReservationsBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-tab-content" id="tab-orders">
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Items Ordered</th>
+                                    <th>Customer Name</th>
+                                    <th>Contact No</th>
+                                    <th>Location</th>
+                                    <th>Total Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminOrdersBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-tab-content" id="tab-add-breed">
+                    <form class="modal-form" id="addBreedForm" style="margin-top: 16px;">
+                        <div class="form-group">
+                            <label for="addBreedName">Breed Name *</label>
+                            <input type="text" id="addBreedName" required placeholder="e.g. Mudhol Hound">
+                        </div>
+                        <div class="form-group">
+                            <label for="addBreedDescription">Description *</label>
+                            <textarea id="addBreedDescription" required placeholder="e.g. Known for speed, agility and loyalty..." rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addBreedColors">Available Colors *</label>
+                            <input type="text" id="addBreedColors" required placeholder="e.g. Fawn | Black | White">
+                        </div>
+                        <div class="form-group">
+                            <label>Hub Locations Available *</label>
+                            <div style="display: flex; gap: 16px; margin-top: 6px; padding: 8px 0;">
+                                <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; font-size: 14px; cursor: pointer;">
+                                    <input type="checkbox" id="addLocCb" value="Chikkaballapur" checked> Chikkaballapur
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; font-weight: normal; font-size: 14px; cursor: pointer;">
+                                    <input type="checkbox" id="addLocSg" value="Shidlagatt"> Shidlagatt
+                                </label>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 16px;">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="addPriceMin">Price Range Min (INR) *</label>
+                                <input type="number" id="addPriceMin" required placeholder="e.g. 15000" min="0">
+                            </div>
+                            <div class="form-group" style="flex: 1;">
+                                <label for="addPriceMax">Price Range Max (INR) *</label>
+                                <input type="number" id="addPriceMax" required placeholder="e.g. 45000" min="0">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="addBreedImages">Image Filenames (comma-separated) *</label>
+                            <input type="text" id="addBreedImages" required placeholder="e.g. image1.jpeg, image2.jpeg">
+                            <span class="auth-helper-text" style="display: block; margin-top: 4px; font-size: 11px;">
+                                <i class="fa-solid fa-circle-info"></i> Make sure these images are copied/placed in the DogWebsite directory.
+                            </span>
+                        </div>
+                        <button type="submit" class="modal-submit-btn" style="margin-top: 16px;">
+                            <i class="fa-solid fa-plus-circle"></i> Add Breed to Explorer
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal (Login / Sign Up / User Profile) -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card auth-card">
+            <!-- Header -->
+            <div class="modal-header">
+                <h3 id="authModalTitle">User Account</h3>
+                <button class="close-modal-btn" id="closeAuthBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <!-- Body -->
+            <div class="modal-body">
+                <!-- Tabs for non-logged-in state -->
+                <div id="authTabs" class="admin-tabs">
+                    <button class="admin-tab-btn active" id="tabBtnLogin">Login</button>
+                    <button class="admin-tab-btn" id="tabBtnRegister">Register</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="modal-form">
+                    <div class="form-group">
+                        <label for="loginUsername">Email Address *</label>
+                        <input
+                            type="email"
+                            id="loginUsername"
+                            required
+                            placeholder="Enter your email address"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password *</label>
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            required
+                            placeholder="Enter your password"
+                        >
+                    </div>
+                    <button type="submit" class="modal-submit-btn">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="modal-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="regFullName">Full Name *</label>
+                        <input type="text" id="regFullName" required placeholder="Enter full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Email Address *</label>
+                        <input type="email" id="regUsername" required placeholder="Enter your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Contact Number *</label>
+                        <input type="tel" id="regPhone" required placeholder="Enter 10-digit phone number">
+                    </div>
+                    <div class="form-group">
+                        <label for="regLocation">Hub Location *</label>
+                        <select id="regLocation" required>
+                            <option value="" disabled selected>Select location</option>
+                            <option>Andhra Pradesh</option>
+                            <option>Arunachal Pradesh</option>
+                            <option>Assam</option>
+                            <option>Bihar</option>
+                            <option>Chhattisgarh</option>
+                            <option>Goa</option>
+                            <option>Gujarat</option>
+                            <option>Haryana</option>
+                            <option>Himachal Pradesh</option>
+                            <option>Jharkhand</option>
+                            <option>Karnataka</option>
+                            <option>Kerala</option>
+                            <option>Madhya Pradesh</option>
+                            <option>Maharashtra</option>
+                            <option>Manipur</option>
+                            <option>Meghalaya</option>
+                            <option>Mizoram</option>
+                            <option>Nagaland</option>
+                            <option>Odisha</option>
+                            <option>Punjab</option>
+                            <option>Rajasthan</option>
+                            <option>Sikkim</option>
+                            <option>Tamil Nadu</option>
+                            <option>Telangana</option>
+                            <option>Tripura</option>
+                            <option>Uttar Pradesh</option>
+                            <option>Uttarakhand</option>
+                            <option>West Bengal</option>
+                            <option>Andaman and Nicobar Islands</option>
+                            <option>Chandigarh</option>
+                            <option>Dadra and Nagar Haveli and Daman and Diu</option>
+                            <option>Delhi</option>
+                            <option>Jammu and Kashmir</option>
+                            <option>Ladakh</option>
+                            <option>Lakshadweep</option>
+                            <option>Puducherry</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Password *</label>
+                        <input type="password" id="regPassword" required placeholder="Enter a password">
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Re-Enter Password *</label>
+                        <input type="password" id="regConfirmPassword" required placeholder="Re-Enter a password">
+                    </div>
+                    <button type="submit" class="modal-submit-btn">
+                        <i class="fa-solid fa-user-plus"></i> Register & Login
+                    </button>
+                </form>
+
+                <!-- Profile Info (Visible when logged in) -->
+                <div id="profileView" style="display: none;">
+                    <div class="profile-header-info" style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
+                        <div class="profile-avatar-container" style="position: relative; width: 64px; height: 64px; flex-shrink: 0;">
+                            <img id="profileAvatarImg" src="" alt="Avatar" onclick="openLightbox(this.src)" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background-color: var(--primary-light); cursor: pointer;" title="View Fullscreen">
+                            <label for="avatarUploadInput" class="avatar-edit-label" style="position: absolute; bottom: -2px; right: -2px; background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; border: 2px solid white; box-shadow: var(--shadow-sm);" title="Upload Profile Photo">
+                                <i class="fa-solid fa-camera"></i>
+                            </label>
+                            <input type="file" id="avatarUploadInput" accept="image/*" style="display: none;">
+                            <button id="removeAvatarBtn" onclick="removeProfilePhoto()" style="position: absolute; top: -2px; right: -2px; background: #e63946; color: white; width: 22px; height: 22px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; border: 2px solid white; box-shadow: var(--shadow-sm); padding: 0;" title="Remove Profile Photo">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                        <div class="profile-titles">
+                            <h4 id="profileName" style="font-size: 24px; color: var(--secondary); margin-bottom: 4px; margin-top: 0;">Tejas H V</h4>
+                            <span class="user-role-badge" id="profileRole">User</span>
+                        </div>
+                    </div>
+
+                    <div class="confirm-details" style="margin-top: 16px;">
+                        <p><strong>Username:</strong> <span id="profileUsername">user</span></p>
+                        <p><strong>Contact No:</strong> <span id="profilePhone">9663872853</span> <button class="edit-profile-btn" onclick="editContactNumber()" style="background: none; border: none; color: var(--primary); cursor: pointer; margin-left: 8px;" title="Edit Contact Number"><i class="fa-solid fa-pen-to-square"></i></button></p>
+                        <p><strong>Hub Location:</strong> <span id="profileLoc">Chikkaballapur</span></p>
+                    </div>
+
+                    <!-- Session History (Login / Logout) -->
+                    <div class="user-history-section" style="margin-top: 20px;">
+                        <h5 style="font-size: 14px; margin-bottom: 8px; color: var(--secondary); display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-clock-rotate-left"></i> Session Logs (Login / Logout)</h5>
+                        <div class="table-container" style="max-height: 120px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px;">
+                            <table class="admin-table" style="margin: 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 100px;">Date</th>
+                                        <th style="width: 80px;">Action</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userSessionHistoryBody">
+                                    <!-- User login/logout logs go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Order & Booking History -->
+                    <div class="user-history-section" style="margin-top: 20px;">
+                        <h5 style="font-size: 14px; margin-bottom: 8px; color: var(--secondary); display: flex; align-items: center; gap: 6px;"><i class="fa-solid fa-receipt"></i> My Orders & Bookings</h5>
+                        <div class="table-container" style="max-height: 120px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px;">
+                            <table class="admin-table" style="margin: 0;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 100px;">Date</th>
+                                        <th style="width: 80px;">Type</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userOrderHistoryBody">
+                                    <!-- User reservations and orders go here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions" style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px;">
+                        <button type="button" class="modal-submit-btn" id="adminDashboardLinkBtn" style="background-color: var(--secondary); display: none; margin: 0;">
+                            <i class="fa-solid fa-user-shield"></i> Open Admin Dashboard
+                        </button>
+                        <button type="button" class="modal-close-action-btn" id="logoutBtn" style="background-color: #e63946; color: white;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Sync Profiles across devices (Visible for static mode fallback) -->
+                <div id="staticSyncSection" style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px; font-size: 12px; text-align: center;">
+                    <span style="color: var(--text-muted);">Sync profiles across devices?</span><br>
+                    <div style="margin-top: 8px; display: flex; gap: 12px; justify-content: center;">
+                        <a href="#" onclick="exportSyncCode(); return false;" style="color: var(--primary); text-decoration: none; font-weight: bold;"><i class="fa-solid fa-file-export"></i> Export Accounts</a>
+                        <a href="#" onclick="importSyncCode(); return false;" style="color: var(--primary); text-decoration: none; font-weight: bold;"><i class="fa-solid fa-file-import"></i> Import Accounts</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-info-brand">
+                <h3>CB_Dogs_Hub</h3>
+                <p>Premium quality puppy breeders and providers. Delivering healthy, happy, and loving companions directly to your doorstep in Chikkaballapur and Shidlagatt.</p>
+                <div class="social-links">
+                    <a href="https://facebook.com" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/cb_dogs_hub?igsh=dTRuZnFnaXBpaTQ1" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.youtube.com/@cb_dogs_hub" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://whatsapp.com/channel/0029VbDNZ2D4dTnSDkCHwh0n" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-contact">
+                <h4>Contact Details</h4>
+                <ul class="contact-list">
+                    <li><i class="fa-solid fa-phone"></i> +91 9663872853</li>
+                    <li><i class="fa-solid fa-envelope"></i> cbdogshub@gmail.com</li>
+                    <li><i class="fa-solid fa-clock"></i> 24/7 Available </li>
+                </ul>
+            </div>
+
+            <div class="footer-hubs">
+                <h4>Our Service Hubs</h4>
+                <ul class="hubs-list">
+                    <li>All Over India</li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 CB_Dogs_Hub.</p>
+        </div>
+    </footer>
+
+    <!-- Image Lightbox Overlay -->
+    <div id="imageLightbox" class="lightbox-overlay" onclick="closeLightbox()">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightboxImg" src="" class="lightbox-content" onclick="event.stopPropagation()">
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>
